@@ -1,0 +1,33 @@
+{
+  "name": "douxue-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon bin/www",
+    "dev": "./node_modules/.bin/nodemon bin/www",
+    "prd": "pm2 start bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/beanLau/douxue-api.git"
+  },
+  "author": "beanLiu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beanLau/douxue-api/issues"
+  },
+  "homepage": "https://github.com/beanLau/douxue-api#readme",
+  "dependencies": {
+    "jade": "^1.11.0",
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.2.0",
+    "koa2-cors": "^2.0.6",
+    "mongoose": "^5.6.3",
+    "nodemon": "^1.19.1"
+  }
+}

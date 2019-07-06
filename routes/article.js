@@ -1,0 +1,109 @@
+const router = require('koa-router')();
+const Article = require('../models/article');
+const Type = require('../models/type');
+const Tag = require('../models/tag');
+
+/**
+ * 新增或修改接口
+ */
+router.post('/addUpdateArticle', async (ctx) => {
+    let reqData = ctx.request.body;
+    let article, type, tag;
+    type = await Type.findById(reqData.typeId)
+    tag = await Tag.findById(reqData.tagId)
+    if (reqData._id) { //如果传入id了为更新操作。
+        article = await Article.findOneAndUpdate({ _id: reqData._id }, {
+            title: reqData.title,
+            enable: false,
+            typeId: reqData.typeId,
+            typeName: type.name,
+            tagId: reqData.tagId,
+            tagName: tag.name,
+            content: reqData.content,
+            updated_at: Date.now()
+        })
+    } else {
+        article = await Article.create({
+            title: reqData.title,
+            enable: false,
+            typeId: reqData.typeId,
+            typeName: type.name,
+            tagId: reqData.tagId,
+            tagName: tag.name,
+            content: reqData.content,
+            created_at: Date.now(),
+            updated_at: Date.now()
+        })
+    }
+    ctx.body = {
+        code: 0,
+        data: article,
+        msg: 'ok'
+    }
+})
+/**
+ * 删除标签
+ */
+router.post('/deleteArticle', async (ctx) => {
+    let article = await Article.deleteOne({ _id: ctx.request.body._id })
+    ctx.body = {
+        code: 0,
+        data: article,
+        msg: 'ok'
+    }
+})
+/**
+ * 列表分页查询接口
+ */
+router.post('/findArticles', async (ctx) => {
+    let reqData = ctx.request.body;
+    reqData = Object.assign({
+        pageSize: 10,
+        pageIndex: 1
+    }, reqData)
+    const reg = new RegExp(reqData.title, 'i');
+    let _filter = {
+        title: { $regex: reg }
+    }
+    let count = 0;
+    let skip = (reqData.pageIndex - 1) * reqData.pageSize
+    let articles;
+    if (reqData.typeId) {
+        articles = await Article.find(_filter).where('typeId').equals(reqData.typeId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+    } else {
+        articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+    }
+    if (reqData.typeId) {
+        count = await Article.count(_filter).where('typeId').equals(reqData.typeId);
+    } else {
+        count = await Article.count(_filter);
+    }
+    ctx.body = {
+        code: 0,
+        data: {
+            list: articles,
+            pageSize: reqData.pageSize,
+            pageIndex: reqData.pageIndex,
+            total: count
+        },
+        msg: 'ok'
+    }
+})
+/**
+ * 启用禁用接口
+ * _id
+ * status 1启用 0 禁用
+ */
+router.post('/enableArticle', async (ctx) => {
+    let reqData = ctx.request.body;
+    let article;
+    article = await Article.findOneAndUpdate({ _id: reqData._id }, {
+        enable: reqData.enable
+    })
+    ctx.body = {
+        code: 0,
+        data: article,
+        msg: 'ok'
+    }
+})
+module.exports = router
