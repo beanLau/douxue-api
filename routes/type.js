@@ -10,11 +10,13 @@ router.post('/addUpdateType', async (ctx) => {
     if(reqData._id){ //如果传入id了为更新操作。
         type = await Type.findOneAndUpdate({_id: reqData._id},{
             name: reqData.name,
+            url: reqData.url,
             updated_at: Date.now()
         })
     }else{
         type = await Type.create({
             name: reqData.name,
+            url: reqData.url,
             created_at: Date.now(),
             updated_at: Date.now()
         })

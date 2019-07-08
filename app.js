@@ -14,6 +14,7 @@ db.once('open', function () {
 const router = new Router()
 const app = new Koa()
 
+const utils = require('./routes/utils')
 const article = require('./routes/article')
 const tag = require('./routes/tag')
 const type = require('./routes/type')
@@ -37,10 +38,16 @@ app.use(views('views', {
     extension: 'jade'
 }));
 
-app.use(koaBody())
+app.use(koaBody({
+    multipart: true,
+    formidable: {
+        maxFileSize: 2000 * 1024 * 1024    // 设置上传文件大小最大限制，默认2M
+    }
+}))
 
 app.use(require('koa-static')(__dirname + '/public'));
 
+app.use(utils.routes()).use(utils.allowedMethods())
 app.use(article.routes()).use(article.allowedMethods())
 app.use(tag.routes()).use(tag.allowedMethods())
 app.use(type.routes()).use(type.allowedMethods())
