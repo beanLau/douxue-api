@@ -7,13 +7,13 @@ const Type = require('../models/type');
 router.post('/addUpdateType', async (ctx) => {
     let reqData = ctx.request.body;
     let type;
-    if(reqData._id){ //如果传入id了为更新操作。
-        type = await Type.findOneAndUpdate({_id: reqData._id},{
+    if (reqData._id) { //如果传入id了为更新操作。
+        type = await Type.findOneAndUpdate({ _id: reqData._id }, {
             name: reqData.name,
             url: reqData.url,
             updated_at: Date.now()
         })
-    }else{
+    } else {
         type = await Type.create({
             name: reqData.name,
             url: reqData.url,
@@ -31,7 +31,7 @@ router.post('/addUpdateType', async (ctx) => {
  * 删除标签
  */
 router.post('/deleteType', async (ctx) => {
-    let type = await Type.deleteOne({_id: ctx.request.body._id})
+    let type = await Type.deleteOne({ _id: ctx.request.body._id })
     ctx.body = {
         code: 0,
         data: type,
@@ -46,7 +46,7 @@ router.post('/findTypes', async (ctx) => {
     reqData = Object.assign({
         pageSize: 10,
         pageIndex: 1
-    },reqData)
+    }, reqData)
     const reg = new RegExp(reqData.name, 'i');
     let _filter = {
         $or: [
@@ -54,7 +54,7 @@ router.post('/findTypes', async (ctx) => {
         ]
     }
     let count = 0;
-    let skip = (reqData.pageIndex -1 ) * reqData.pageSize
+    let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let types = await Type.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
     count = await Type.count(_filter);
     ctx.body = {
@@ -64,6 +64,25 @@ router.post('/findTypes', async (ctx) => {
             pageSize: reqData.pageSize,
             pageIndex: reqData.pageIndex,
             total: count
+        },
+        msg: 'ok'
+    }
+})
+
+router.post('/findTypesByPid', async (ctx) => {
+    let reqData = ctx.request.body;
+    let types = await Type.find({ pid: reqData.pid }).sort({ 'created_at': -1 });
+    let childTypes;
+    types.forEach(async (item) => {
+        childTypes = await Type.find({ pid: item._id }).sort({ 'created_at': -1 });
+        if (Array.isArray(childTypes) && childTypes.length > 0) {
+            item.hasChildren = true
+        }
+    })
+    ctx.body = {
+        code: 0,
+        data: {
+            list: types
         },
         msg: 'ok'
     }
