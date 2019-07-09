@@ -1,5 +1,6 @@
 const router = require('koa-router')();
 const Type = require('../models/type');
+const utils = require('../utils');
 
 /**
  * 新增或修改接口
@@ -10,6 +11,7 @@ router.post('/addUpdateType', async (ctx) => {
     if (reqData._id) { //如果传入id了为更新操作。
         type = await Type.findOneAndUpdate({ _id: reqData._id }, {
             name: reqData.name,
+            pid: reqData.pid || '',
             url: reqData.url,
             updated_at: Date.now()
         })
@@ -17,6 +19,7 @@ router.post('/addUpdateType', async (ctx) => {
         type = await Type.create({
             name: reqData.name,
             url: reqData.url,
+            pid: reqData.pid || '',
             created_at: Date.now(),
             updated_at: Date.now()
         })
@@ -49,18 +52,37 @@ router.post('/findTypes', async (ctx) => {
     }, reqData)
     const reg = new RegExp(reqData.name, 'i');
     let _filter = {
-        $or: [
-            { name: { $regex: reg } }
+        $and: [
+            { name: { $regex: reg } },
+            { pid: reqData.pid || '' }
         ]
     }
     let count = 0;
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let types = await Type.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
     count = await Type.count(_filter);
+    let list = []
+    for (let i = 0; i < types.length; i++) {
+        let type = types[i]
+        let childs = await Type.find({ pid: type._id });
+        if (childs.length > 0) {
+            type['hasChildren'] = true
+        } else {
+            type['hasChildren'] = false
+        }
+        list.push({
+            _id: type._id,
+            name: type.name,
+            url: type.url,
+            pid: type.pid,
+            created_at: type.created_at,
+            hasChildren: type.hasChildren
+        })
+    }
     ctx.body = {
         code: 0,
         data: {
-            list: types,
+            list: list,
             pageSize: reqData.pageSize,
             pageIndex: reqData.pageIndex,
             total: count
@@ -72,17 +94,28 @@ router.post('/findTypes', async (ctx) => {
 router.post('/findTypesByPid', async (ctx) => {
     let reqData = ctx.request.body;
     let types = await Type.find({ pid: reqData.pid }).sort({ 'created_at': -1 });
-    let childTypes;
-    types.forEach(async (item) => {
-        childTypes = await Type.find({ pid: item._id }).sort({ 'created_at': -1 });
-        if (Array.isArray(childTypes) && childTypes.length > 0) {
-            item.hasChildren = true
+    let list = []
+    for (let i = 0; i < types.length; i++) {
+        let type = types[i]
+        let childs = await Type.find({ pid: type._id });
+        if (childs.length > 0) {
+            type['hasChildren'] = true
+        } else {
+            type['hasChildren'] = false
         }
-    })
+        list.push({
+            _id: type._id,
+            name: type.name,
+            pid: type.pid,
+            url: type.url,
+            created_at: type.created_at,
+            hasChildren: type.hasChildren
+        })
+    }
     ctx.body = {
         code: 0,
         data: {
-            list: types
+            list: list
         },
         msg: 'ok'
     }
@@ -92,10 +125,11 @@ router.post('/findTypesByPid', async (ctx) => {
  */
 router.post('/findAllTypes', async (ctx) => {
     let types = await Type.find().sort({ 'created_at': -1 })
+    let list = utils.filterArray(types)
     ctx.body = {
         code: 0,
         data: {
-            list: types
+            list: list
         },
         msg: 'ok'
     }
