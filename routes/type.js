@@ -125,11 +125,11 @@ router.post('/findTypesByPid', async (ctx) => {
  */
 router.post('/findAllTypes', async (ctx) => {
     let types = await Type.find().sort({ 'created_at': -1 })
-    let list = utils.filterArray(types)
+    //let list = utils.filterArray('id','pid',types)
     ctx.body = {
         code: 0,
         data: {
-            list: list
+            list: types
         },
         msg: 'ok'
     }
