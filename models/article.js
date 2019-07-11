@@ -8,6 +8,8 @@ var ArticleSchema = new Schema({
     typeName: { type: String },
     tagId: { type: String },
     tagName: { type: String },
+    readCount: { type: Number, default: 0 },
+    likeCount: { type: Number, default: 0 },
     content: { type: String, required: true },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
