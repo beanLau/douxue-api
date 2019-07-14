@@ -18,6 +18,7 @@ const utils = require('./routes/utils')
 const article = require('./routes/article')
 const tag = require('./routes/tag')
 const type = require('./routes/type')
+const soul = require('./routes/soul')
 
 app.use(cors({
     origin: function (ctx) {
@@ -51,5 +52,6 @@ app.use(utils.routes()).use(utils.allowedMethods())
 app.use(article.routes()).use(article.allowedMethods())
 app.use(tag.routes()).use(tag.allowedMethods())
 app.use(type.routes()).use(type.allowedMethods())
+app.use(soul.routes()).use(soul.allowedMethods())
 
 module.exports = app
