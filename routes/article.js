@@ -10,15 +10,18 @@ router.post('/addUpdateArticle', async (ctx) => {
     let reqData = ctx.request.body;
     let article, type, tag;
     type = await Type.findById(reqData.typeId)
+    type = type || {}
     tag = await Tag.findById(reqData.tagId)
+    tag = tag || {}
     if (reqData._id) { //如果传入id了为更新操作。
         article = await Article.findOneAndUpdate({ _id: reqData._id }, {
             title: reqData.title,
             enable: false,
+            url: reqData.url,
             typeId: reqData.typeId,
             typeName: type.name,
-            tagId: reqData.tagId,
-            tagName: tag.name,
+            tagId: reqData.tagId || "",
+            tagName: tag.name || "",
             content: reqData.content,
             updated_at: Date.now()
         })
@@ -27,9 +30,10 @@ router.post('/addUpdateArticle', async (ctx) => {
             title: reqData.title,
             enable: false,
             typeId: reqData.typeId,
+            url: reqData.url,
             typeName: type.name,
-            tagId: reqData.tagId,
-            tagName: tag.name,
+            tagId: reqData.tagId || "",
+            tagName: tag.name || "",
             content: reqData.content,
             created_at: Date.now(),
             updated_at: Date.now()
