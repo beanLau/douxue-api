@@ -4,8 +4,9 @@ const koaBody = require('koa-body')
 const Router = require('koa-router')
 const views = require('koa-views')
 const mongoose = require('mongoose')
-import jwt from 'koa-jwt'
-import errorHandle from './middle/errorHandle'
+const jwt = require('koa-jwt')
+const errorHandle = require('./middle/errorHandle')
+
 mongoose.connect('mongodb://localhost/douxue');
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
