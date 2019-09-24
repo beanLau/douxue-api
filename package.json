@@ -21,8 +21,10 @@
   "homepage": "https://github.com/beanLau/douxue-api#readme",
   "dependencies": {
     "jade": "^1.11.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",
+    "koa-jwt": "^3.6.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
