@@ -1,15 +1,20 @@
 const router = require('koa-router')();
 const User = require('../models/user');
+const jsonwebtoken = require("jsonwebtoken")
 
+router.prefix("/api")
 //登陆接口
 router.post('/login', async (ctx) => {
     const { body } = ctx.request;
-    if(body.username === "liuweitao" && body.password === "weitao90127"){
+    if(body.username === "liuweitao" && body.password === "weitao901127"){
         ctx.body = {
             code: 0,
             msg: '登录成功',
             data: {
-                user: user.userInfo,
+                user: {
+                    username: "liuweitao",
+                    password: "weitao901127"
+                },
                 // 生成 token 返回给客户端
                 token: jsonwebtoken.sign({
                     data: body,
@@ -18,12 +23,14 @@ router.post('/login', async (ctx) => {
                 },"jwt_douxue"),
             }
         }
+        ctx.status = 200
+        return;
     }
     try {
       const user = await User.findOne({ username: body.username });
       if (!user) {
         ctx.body = {
-            code: 0,
+            code: 1,
             data: {},
             msg: '用户名或密码错误！'
         }
@@ -47,7 +54,7 @@ router.post('/login', async (ctx) => {
         }
       } else {
         ctx.body = {
-            code: 0,
+            code: 1,
             data: {},
             msg: '用户名或密码错误！'
         }

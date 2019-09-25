@@ -22,11 +22,12 @@ const article = require('./routes/article')
 const tag = require('./routes/tag')
 const type = require('./routes/type')
 const soul = require('./routes/soul')
+const user = require('./routes/user')
 
 app.use(errorHandle).use(jwt({
     secret:"jwt_douxue"
   }).unless({
-    path: [/\/register/, /\/login/],
+    path: [new RegExp("\/login")],
   }))
 
 app.use(cors({
@@ -62,5 +63,6 @@ app.use(article.routes()).use(article.allowedMethods())
 app.use(tag.routes()).use(tag.allowedMethods())
 app.use(type.routes()).use(type.allowedMethods())
 app.use(soul.routes()).use(soul.allowedMethods())
+app.use(user.routes()).use(user.allowedMethods())
 
 module.exports = app
