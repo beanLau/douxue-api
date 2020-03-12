@@ -2,17 +2,20 @@ const router = require('koa-router')();
 const Article = require('../models/article');
 const Type = require('../models/type');
 const Tag = require('../models/tag');
+const Special = require('../models/special');
 
 /**
  * 新增或修改接口
  */
 router.post('/addUpdateArticle', async (ctx) => {
     let reqData = ctx.request.body;
-    let article, type, tag;
+    let article, type, tag, special;
     type = await Type.findById(reqData.typeId)
     type = type || {}
     tag = await Tag.findById(reqData.tagId)
     tag = tag || {}
+    special = await Special.findById(reqData.specialId)
+    special = special || {}
     if (reqData._id) { //如果传入id了为更新操作。
         article = await Article.findOneAndUpdate({ _id: reqData._id }, {
             title: reqData.title,
@@ -22,6 +25,8 @@ router.post('/addUpdateArticle', async (ctx) => {
             typeName: type.name,
             tagId: reqData.tagId || "",
             tagName: tag.name || "",
+            specialId: reqData.specialId || "",
+            specialName: special.name || "",
             content: reqData.content,
             updated_at: Date.now()
         })
