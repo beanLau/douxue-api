@@ -10,16 +10,12 @@ router.post('/login', async (ctx) => {
             code: 0,
             msg: '登录成功',
             data: {
-                user: {
-                    username: "liuweitao",
-                    password: "weitao901127"
-                },
                 // 生成 token 返回给客户端
                 token: jsonwebtoken.sign({
                     data: body,
                     // 设置 token 过期时间
                     exp: Math.floor(Date.now() / 1000) + (60 * 60), // 60 seconds * 60 minutes = 1 hour
-                },"jwt_douxue"),
+                },"douxue"),
             }
         }
         ctx.status = 200

@@ -21,14 +21,15 @@ const utils = require('./routes/utils')
 const article = require('./routes/article')
 const tag = require('./routes/tag')
 const type = require('./routes/type')
+const special = require('./routes/special')
 const soul = require('./routes/soul')
 const user = require('./routes/user')
 
 
 app.use(errorHandle).use(jwt({
-    secret:"jwt_douxue"
+    secret:"douxue"
   }).unless({
-    path: [new RegExp("\/login")],
+    path: [new RegExp("\/login"),new RegExp("\/upload"),new RegExp("\/images")],
   }))
 
 // app.use(cors({
@@ -64,6 +65,7 @@ app.use(utils.routes()).use(utils.allowedMethods())
 app.use(article.routes()).use(article.allowedMethods())
 app.use(tag.routes()).use(tag.allowedMethods())
 app.use(type.routes()).use(type.allowedMethods())
+app.use(special.routes()).use(special.allowedMethods())
 app.use(soul.routes()).use(soul.allowedMethods())
 app.use(user.routes()).use(user.allowedMethods())
 
