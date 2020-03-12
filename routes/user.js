@@ -2,7 +2,6 @@ const router = require('koa-router')();
 const User = require('../models/user');
 const jsonwebtoken = require("jsonwebtoken")
 
-router.prefix("/api")
 //登陆接口
 router.post('/login', async (ctx) => {
     const { body } = ctx.request;

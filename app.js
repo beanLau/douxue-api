@@ -24,26 +24,28 @@ const type = require('./routes/type')
 const soul = require('./routes/soul')
 const user = require('./routes/user')
 
+
 app.use(errorHandle).use(jwt({
     secret:"jwt_douxue"
   }).unless({
     path: [new RegExp("\/login")],
   }))
 
-app.use(cors({
-    origin: function (ctx) {
-        //console.log(ctx.header.host)
-        // if (ctx.header.host === 'localhost:8080') {
-        //     return '*';
-        // }
-        return '*';
-    },
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-    maxAge: 5,
-    credentials: true,
-    allowMethods: ['GET', 'POST', 'DELETE'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept','token'],
-}));
+// app.use(cors({
+//     origin: function (ctx) {
+//         //console.log(ctx.header.host)
+//         // if (ctx.header.host === 'localhost:8080') {
+//         //     return '*';
+//         // }
+//         return '*';
+//     },
+//     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+//     maxAge: 5,
+//     credentials: true,
+//     allowMethods: ['GET', 'POST', 'DELETE'],
+//     allowHeaders: ['Content-Type', 'Authorization', 'Accept','token'],
+// }));
+
 app.use(views('views', {
     root: __dirname + '/views',
     extension: 'jade'
