@@ -34,15 +34,10 @@ router.post('/addUpdateType', async (ctx) => {
  * 删除标签
  */
 router.post('/deleteType', async (ctx) => {
-    let type = await Type.deleteMany({
-        $and: [
-            { pid: ctx.request.body._id },
-            { _id: ctx.request.body._id }
-        ]
-    })
+    let tag = await Type.deleteOne({_id: ctx.request.body._id})
     ctx.body = {
         code: 0,
-        data: type,
+        data: tag,
         msg: 'ok'
     }
 })

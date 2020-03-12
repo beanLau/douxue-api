@@ -39,6 +39,8 @@ router.post('/addUpdateArticle', async (ctx) => {
             typeName: type.name,
             tagId: reqData.tagId || "",
             tagName: tag.name || "",
+            specialId: reqData.specialId || "",
+            specialName: special.name || "",
             content: reqData.content,
             created_at: Date.now(),
             updated_at: Date.now()
