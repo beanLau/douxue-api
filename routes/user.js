@@ -3,7 +3,7 @@ const User = require('../models/user');
 const jsonwebtoken = require("jsonwebtoken")
 
 //登陆接口
-router.post('/login', async (ctx) => {
+router.post('/user/login', async (ctx) => {
     const { body } = ctx.request;
     if(body.username === "liuweitao" && body.password === "weitao901127"){
         ctx.body = {
