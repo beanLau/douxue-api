@@ -21,7 +21,7 @@ router.post('/upload', async (ctx) => {
     ctx.body = {
         code: 0,
         data: {
-            url: `http://127.0.0.1:3000/images/${fileName}`
+            url: `/images/${fileName}`
         },
         msg: 'ok'
     }
