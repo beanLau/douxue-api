@@ -6,7 +6,8 @@ const path = require('path')
  */
 router.post('/upload', async (ctx) => {
     const file = ctx.request.files.file;
-    let fileName = file.name.substr(52,file.name.length -1);
+    let beginIndex = file.name.lastIndexOf(".")
+    let fileName = file.name.substr(beginIndex,file.name.length -1);
     fileName = Date.now() + fileName;
 
     const reader = fs.createReadStream(file.path);
