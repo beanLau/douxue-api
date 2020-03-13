@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var ArticleSchema = new Schema({
     title: { type: String, required: true }, //标题
     enable: { type: Boolean, default: false }, //是否启用
-    typeId: { type: String, required: true }, //所属类型id
+    typeId: { type: String, default: "" }, //所属类型id
     typeName: { type: String, default:"" }, //所属类型名称
     url: { type: String, required: true }, //图片url
     tagId: { type: String, default:""}, //标签id
