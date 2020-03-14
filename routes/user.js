@@ -14,7 +14,7 @@ router.post('/user/login', async (ctx) => {
                 token: jsonwebtoken.sign({
                     data: body,
                     // 设置 token 过期时间
-                    exp: Math.floor(Date.now() / 1000) + (60 * 60), // 60 seconds * 60 minutes = 1 hour
+                    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7), // 60 seconds * 60 minutes = 1 hour
                 },"douxue"),
             }
         }
