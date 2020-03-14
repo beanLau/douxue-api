@@ -41,7 +41,13 @@ router.post('/xcxapi/getArticleList', async (ctx) => {
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let articles;
     if (reqData.tagId) {
-        articles = await Article.find(_filter).where('tagId').equals(reqData.tagId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+        if(reqData.tagId == -1){ //按照浏览排序
+            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'readCount': -1 }).skip(skip);
+        }else if(reqData.tagId == -2){ //按照点赞排序
+            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'likeCount': -1 }).skip(skip);
+        }else{
+            articles = await Article.find(_filter).where('tagId').equals(reqData.tagId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+        }
     } else {
         articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
     }
