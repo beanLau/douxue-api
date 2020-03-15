@@ -2,6 +2,7 @@ const router = require('koa-router')();
 const Comment = require('../models/comment');
 const User = require('../models/user')
 const jsonwebtoken = require("jsonwebtoken")
+const utils = require('../utils')
 
 /**
  * 新增或修改接口
@@ -67,8 +68,11 @@ router.post('/findComments', async (ctx) => {
     }
     let count = 0;
     let skip = (reqData.pageIndex -1 ) * reqData.pageSize
-    let comment = await Comment.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+    let comment = await Comment.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();
     count = await Comment.count(_filter);
+    comment.forEach(item=>{
+        item.created_at = utils.formatDbDate(item.created_at)
+    })
     ctx.body = {
         code: 0,
         data: {
@@ -122,12 +126,15 @@ router.post('/findCommentsByArticleId', async (ctx) => {
     let count = 0;
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let comments;
-    comments = await Comment.find(_filter).limit(reqData.pageSize).sort({ 'create_at': -1 }).skip(skip);
+    comments = await Comment.find(_filter).limit(reqData.pageSize).sort({ 'create_at': -1 }).skip(skip).lean();
     if (reqData.articleId) {
         count = await Comment.count(_filter);
     } else {
         count = await Comment.count(_filter);
     }
+    comments.forEach(item=>{
+        item.created_at = utils.formatDbDate(item.created_at)
+    })
     ctx.body = {
         code: 0,
         data: {

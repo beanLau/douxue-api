@@ -3,6 +3,7 @@ const Article = require('../models/article');
 const Type = require('../models/type');
 const Tag = require('../models/tag');
 const Special = require('../models/special');
+const utils = require('../utils')
 
 /**
  * 新增或修改接口
@@ -80,15 +81,18 @@ router.post('/findArticles', async (ctx) => {
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let articles;
     if (reqData.typeId) {
-        articles = await Article.find(_filter).where('typeId').equals(reqData.typeId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+        articles = await Article.find(_filter).where('typeId').equals(reqData.typeId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();
     } else {
-        articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+        articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();
     }
     if (reqData.typeId) {
         count = await Article.count(_filter).where('typeId').equals(reqData.typeId);
     } else {
         count = await Article.count(_filter);
     }
+    articles.map(item=>{
+        item.created_at = utils.formatDbDate(item.created_at)
+    })
     ctx.body = {
         code: 0,
         data: {

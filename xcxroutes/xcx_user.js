@@ -94,22 +94,22 @@ router.post('/xcxapi/getArticleList', async (ctx) => {
     let articles;
     if (reqData.tagId) {
         if(reqData.tagId == -1){ //按照浏览排序
-            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'readCount': -1 }).skip(skip);
+            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'readCount': -1 }).skip(skip).lean();
         }else if(reqData.tagId == -2){ //按照点赞排序
-            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'likeCount': -1 }).skip(skip);
+            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'likeCount': -1 }).skip(skip).lean();
         }else{
-            articles = await Article.find(_filter).where('tagId').equals(reqData.tagId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+            articles = await Article.find(_filter).where('tagId').equals(reqData.tagId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();
         }
     } else {
-        articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip);
+        articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();
     }
     if (reqData.tagId) {
         count = await Article.count(_filter).where('tagId').equals(reqData.tagId);
     } else {
         count = await Article.count(_filter);
     }
-    articles.forEach(item=>{
-        item.createdTime = utils.formatDbDate(item.created_at)
+    articles.map(item=>{
+        item.created_at = utils.formatDbDate(item.created_at)
     })
     ctx.body = {
         code: 0,
@@ -150,14 +150,14 @@ router.post('/xcxapi/getArticleListBySpecial', async (ctx) => {
     let count = 0;
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let articles;
-    articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'readCount': -1 }).skip(skip);
+    articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'readCount': -1 }).skip(skip).lean();
     if (reqData.specialId) {
         count = await Article.count(_filter);
     } else {
         count = await Article.count(_filter);
     }
     articles.forEach(item=>{
-        item.createdTime = utils.formatDbDate(item.created_at)
+        item.created_at = utils.formatDbDate(item.created_at)
     })
     ctx.body = {
         code: 0,
