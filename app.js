@@ -24,6 +24,7 @@ const type = require('./routes/type')
 const special = require('./routes/special')
 const soul = require('./routes/soul')
 const user = require('./routes/user')
+const comment = require('./routes/comment')
 
 //小程序接口路由规则
 const xcxuser = require('./xcxroutes/xcx_user')
@@ -71,6 +72,7 @@ app.use(type.routes()).use(type.allowedMethods())
 app.use(special.routes()).use(special.allowedMethods())
 app.use(soul.routes()).use(soul.allowedMethods())
 app.use(user.routes()).use(user.allowedMethods())
+app.use(comment.routes()).use(comment.allowedMethods())
 
 app.use(xcxuser.routes()).use(xcxuser.allowedMethods())
 

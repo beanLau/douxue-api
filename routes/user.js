@@ -102,10 +102,10 @@ router.post('/findUsers', async (ctx) => {
         pageSize: 10,
         pageIndex: 1
     },reqData)
-    const reg = new RegExp(reqData.userName, 'i');
+    const reg = new RegExp(reqData.nickName, 'i');
     let _filter = {
         $or: [
-            { userName: { $regex: reg } }
+            { nickName: { $regex: reg } }
         ]
     }
     let count = 0;

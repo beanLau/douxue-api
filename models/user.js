@@ -2,12 +2,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-  userName: { type: String, required: true },
-  password: { type: String, required: true },
-  phone: { type: String, default: "" },
-  pic: { type: String, default: "" },
-  nickName: { type: String, default: "" },
+  openId: { type: String, required: true },
   nickName: { type: String, default: ""  },
+  gender: { type: String, default: ""  },
+  language: { type: String, default: ""  },
+  city: { type: String, default: ""  },
+  province: { type: String, default: ""  },
+  country: { type: String, default: ""  },
+  avatarUrl: { type: String, default: ""  },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now }
 });

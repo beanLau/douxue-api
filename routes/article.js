@@ -117,4 +117,22 @@ router.post('/enableArticle', async (ctx) => {
         msg: 'ok'
     }
 })
+
+/**
+ * 查询详情
+ */
+router.post('/findArticleById', async (ctx) => {
+    let reqData = ctx.request.body;
+    let articleDetail = await Article.findOne({ _id: reqData.id });
+    await Article.findOneAndUpdate({ _id: reqData.id }, {
+        readCount: articleDetail.readCount + 1
+    })
+    ctx.body = {
+        code: 0,
+        data: {
+            articleDetail: articleDetail
+        },
+        msg: 'ok'
+    }
+})
 module.exports = router
