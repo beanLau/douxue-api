@@ -21,8 +21,8 @@ router.post('/addUpdateArticle', async (ctx) => {
             title: reqData.title,
             enable: false,
             url: reqData.url,
-            typeId: reqData.typeId,
-            typeName: type.name,
+            typeId: reqData.typeId || "",
+            typeName: type.name || "",
             tagId: reqData.tagId || "",
             tagName: tag.name || "",
             specialId: reqData.specialId || "",
@@ -126,6 +126,24 @@ router.post('/findArticleById', async (ctx) => {
     let articleDetail = await Article.findOne({ _id: reqData.id });
     await Article.findOneAndUpdate({ _id: reqData.id }, {
         readCount: articleDetail.readCount + 1
+    })
+    ctx.body = {
+        code: 0,
+        data: {
+            articleDetail: articleDetail
+        },
+        msg: 'ok'
+    }
+})
+
+/**
+ * 点赞功能
+ */
+router.post('/addLikeCount', async (ctx) => {
+    let reqData = ctx.request.body;
+    let articleDetail = await Article.findOne({ _id: reqData.articleId });
+    await Article.findOneAndUpdate({ _id: reqData.articleId }, {
+        likeCount: (articleDetail.likeCount || 0) + 1
     })
     ctx.body = {
         code: 0,
