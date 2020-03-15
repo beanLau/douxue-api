@@ -17,7 +17,7 @@ module.exports = {
         return tree;
     },
     formatDbDate: function(data,style){
-        data = new Date("2020-03-12T15:20:04.341Z")
+        data = new Date(data)
         style = style || "yyyy-mm-dd"
         if(style == "yyyy-mm-dd"){
             return `${data.getFullYear()}-${data.getMonth()+1}-${data.getDay()}`

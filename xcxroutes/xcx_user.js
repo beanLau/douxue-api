@@ -108,8 +108,8 @@ router.post('/xcxapi/getArticleList', async (ctx) => {
     } else {
         count = await Article.count(_filter);
     }
-    articles.map((item)=>{
-        item.created_at = utils.formatDbDate(item.created_at)
+    articles.forEach(item=>{
+        item.createdTime = utils.formatDbDate(item.created_at)
     })
     ctx.body = {
         code: 0,

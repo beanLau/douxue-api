@@ -21,7 +21,7 @@ router.post('/upload', async (ctx) => {
     ctx.body = {
         code: 0,
         data: {
-            url: `/images/${fileName}`
+            url: `http://manage.douxue.top/images/${fileName}`
         },
         msg: 'ok'
     }
