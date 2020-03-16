@@ -87,7 +87,8 @@ router.post('/xcxapi/getArticleList', async (ctx) => {
     }, reqData)
     const reg = new RegExp(reqData.title, 'i');
     let _filter = {
-        title: { $regex: reg }
+        title: { $regex: reg },
+        enable: true
     }
     let count = 0;
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
@@ -146,7 +147,7 @@ router.post('/xcxapi/getArticleListBySpecial', async (ctx) => {
         pageSize: 10,
         pageIndex: 1
     }, reqData)
-    let _filter = {"specialId": reqData.specialId}
+    let _filter = {"specialId": reqData.specialId, enable: true}
     let count = 0;
     let skip = (reqData.pageIndex - 1) * reqData.pageSize
     let articles;
