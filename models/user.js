@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
   openId: { type: String, required: true },
+  session_key: { type: String, required: true },
   nickName: { type: String, default: ""  },
   gender: { type: String, default: ""  },
   language: { type: String, default: ""  },

@@ -17,7 +17,7 @@ const dxAxios = function (options,ctx) {
                 "content-type": "application/json;charset=utf-8"
             },
             url: url,
-            data: options.body
+            data: (typeof options.body == 'object') ? JSON.stringify(options.body) : options.body
         }
 
         axios(def).then(res=>{

@@ -3,6 +3,7 @@ const Comment = require('../models/comment');
 const User = require('../models/user')
 const jsonwebtoken = require("jsonwebtoken")
 const utils = require('../utils')
+const wxapi = require("../apis/wxapi")
 
 /**
  * 新增或修改接口
@@ -25,6 +26,30 @@ router.post('/xcxapi/addComment', async (ctx) => {
         return
     }
     decoded = jsonwebtoken.verify(token, 'douxue');//通过token解析用户信息
+    let accessTokenObj = await wxapi.getAccessToken()
+    let access_token = accessTokenObj.access_token;
+    if(accessTokenObj.expires_in){
+        global.accessTokenObj = {
+            access_token: access_token,
+            time: Date.now() + 1000 * 60 * 110
+        }
+    }
+    
+    //验证内容是否合法
+    let msgCheckRes = await wxapi.msgSecCheck({
+        access_token: access_token,
+        content: reqData.content
+    })
+    if(msgCheckRes.errcode == "87014"){
+        msg = "内容含有违法违规内容"
+        ctx.body = {
+            code: 1,
+            data: msgCheckRes.errmsg,
+            msg: "内容含有违法违规内容"
+        }
+        return
+    }
+    
     user = await User.findOneAndUpdate({openId: decoded.data.openid},reqData)
     comment = await Comment.create({
         articleId: reqData.articleId,
