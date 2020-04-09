@@ -9,7 +9,6 @@ router.post('/xcxapi/login', async (ctx) => {
     let ctxDATA = JSON.stringify(ctx)
     let wxRes = await wxapi.getWxSessionKey(body)
     let userDetail = await User.findOne({ openId: wxRes.openid })
-    console.log(wxRes)
     if(userDetail){
         wxRes = Object.assign(wxRes,userDetail)
     }else{

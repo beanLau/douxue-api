@@ -26,10 +26,12 @@ const soul = require('./routes/soul')
 const user = require('./routes/user')
 const comment = require('./routes/comment')
 const question = require('./routes/question')
+const daily = require('./routes/daily')
 
 //小程序接口路由规则
 const xcx_user = require('./xcxroutes/xcx_user')
 const xcx_articles = require('./xcxroutes/xcx_articles')
+const xcx_daily = require('./xcxroutes/xcx_daily')
 
 
 app.use(errorHandle).use(jwt({
@@ -76,8 +78,10 @@ app.use(soul.routes()).use(soul.allowedMethods())
 app.use(user.routes()).use(user.allowedMethods())
 app.use(comment.routes()).use(comment.allowedMethods())
 app.use(question.routes()).use(question.allowedMethods())
+app.use(daily.routes()).use(daily.allowedMethods())
 
 app.use(xcx_user.routes()).use(xcx_user.allowedMethods())
 app.use(xcx_articles.routes()).use(xcx_articles.allowedMethods())
+app.use(xcx_daily.routes()).use(xcx_daily.allowedMethods())
 
 module.exports = app
