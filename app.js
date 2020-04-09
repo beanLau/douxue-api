@@ -28,7 +28,8 @@ const comment = require('./routes/comment')
 const question = require('./routes/question')
 
 //小程序接口路由规则
-const xcxuser = require('./xcxroutes/xcx_user')
+const xcx_user = require('./xcxroutes/xcx_user')
+const xcx_articles = require('./xcxroutes/xcx_articles')
 
 
 app.use(errorHandle).use(jwt({
@@ -76,6 +77,7 @@ app.use(user.routes()).use(user.allowedMethods())
 app.use(comment.routes()).use(comment.allowedMethods())
 app.use(question.routes()).use(question.allowedMethods())
 
-app.use(xcxuser.routes()).use(xcxuser.allowedMethods())
+app.use(xcx_user.routes()).use(xcx_user.allowedMethods())
+app.use(xcx_articles.routes()).use(xcx_articles.allowedMethods())
 
 module.exports = app
