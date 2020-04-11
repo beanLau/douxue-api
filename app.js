@@ -32,6 +32,7 @@ const daily = require('./routes/daily')
 const xcx_user = require('./xcxroutes/xcx_user')
 const xcx_articles = require('./xcxroutes/xcx_articles')
 const xcx_daily = require('./xcxroutes/xcx_daily')
+const xcx_question = require('./xcxroutes/xcx_question')
 
 
 app.use(errorHandle).use(jwt({
@@ -83,5 +84,6 @@ app.use(daily.routes()).use(daily.allowedMethods())
 app.use(xcx_user.routes()).use(xcx_user.allowedMethods())
 app.use(xcx_articles.routes()).use(xcx_articles.allowedMethods())
 app.use(xcx_daily.routes()).use(xcx_daily.allowedMethods())
+app.use(xcx_question.routes()).use(xcx_question.allowedMethods())
 
 module.exports = app
