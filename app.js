@@ -27,12 +27,14 @@ const user = require('./routes/user')
 const comment = require('./routes/comment')
 const question = require('./routes/question')
 const daily = require('./routes/daily')
+const config = require('./routes/config')
 
 //小程序接口路由规则
 const xcx_user = require('./xcxroutes/xcx_user')
 const xcx_articles = require('./xcxroutes/xcx_articles')
 const xcx_daily = require('./xcxroutes/xcx_daily')
 const xcx_question = require('./xcxroutes/xcx_question')
+const xcx_config = require('./xcxroutes/xcx_config')
 
 
 app.use(errorHandle).use(jwt({
@@ -80,10 +82,12 @@ app.use(user.routes()).use(user.allowedMethods())
 app.use(comment.routes()).use(comment.allowedMethods())
 app.use(question.routes()).use(question.allowedMethods())
 app.use(daily.routes()).use(daily.allowedMethods())
+app.use(config.routes()).use(config.allowedMethods())
 
 app.use(xcx_user.routes()).use(xcx_user.allowedMethods())
 app.use(xcx_articles.routes()).use(xcx_articles.allowedMethods())
 app.use(xcx_daily.routes()).use(xcx_daily.allowedMethods())
 app.use(xcx_question.routes()).use(xcx_question.allowedMethods())
+app.use(xcx_config.routes()).use(xcx_config.allowedMethods())
 
 module.exports = app
