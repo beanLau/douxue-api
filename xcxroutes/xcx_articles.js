@@ -67,5 +67,51 @@ router.post('/findArticleById', async (ctx) => {
     }
 })
 
+//小程序文章页面查询接口
+	
+router.post('/xcxapi/getArticleList', async (ctx) => {	
+    let reqData = ctx.request.body;	
+    reqData = Object.assign({	
+        pageSize: 10,	
+        pageIndex: 1	
+    }, reqData)	
+    const reg = new RegExp(reqData.title, 'i');	
+    let _filter = {	
+        title: { $regex: reg },	
+        enable: true	
+    }	
+    let count = 0;	
+    let skip = (reqData.pageIndex - 1) * reqData.pageSize	
+    let articles;	
+    if (reqData.tagId) {	
+        if(reqData.tagId == -1){ //按照浏览排序	
+            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'readCount': -1 }).skip(skip).lean();	
+        }else if(reqData.tagId == -2){ //按照点赞排序	
+            articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'likeCount': -1 }).skip(skip).lean();	
+        }else{	
+            articles = await Article.find(_filter).where('tagId').equals(reqData.tagId).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();	
+        }	
+    } else {	
+        articles = await Article.find(_filter).limit(reqData.pageSize).sort({ 'created_at': -1 }).skip(skip).lean();	
+    }	
+    if (reqData.tagId) {	
+        count = await Article.count(_filter).where('tagId').equals(reqData.tagId);	
+    } else {	
+        count = await Article.count(_filter);	
+    }	
+    articles.map(item=>{	
+        item.created_at = utils.formatDbDate(item.created_at)	
+    })	
+    ctx.body = {	
+        code: 0,	
+        data: {	
+            list: articles,	
+            pageSize: reqData.pageSize,	
+            pageIndex: reqData.pageIndex,	
+            total: count	
+        },	
+        msg: 'ok'	
+    }	
+})
 
 module.exports = router

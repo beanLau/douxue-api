@@ -19,4 +19,20 @@ router.post('/xcxapi/findStickQuestions', async (ctx) => {
     }
 })
 
+/**
+ * 获取置顶试题
+ */
+router.post('/xcxapi/getQuestionDetail', async (ctx) => {
+    let reqData = ctx.request.body;
+    let questionDetail = await Question.findOne({ _id: reqData.id });
+    // await Question.findOneAndUpdate({ _id: reqData.id }, {
+    //     readCount: questionDetail.readCount + 1
+    // })
+    ctx.body = {
+        code: 0,
+        data: questionDetail,
+        msg: 'ok'
+    }
+})
+
 module.exports = router
